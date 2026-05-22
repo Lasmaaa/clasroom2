@@ -1,0 +1,4 @@
+.teacher-brand-dot { background-color: var(--theme-color, #3b82f6); }
+.teacher-brand-text { color: var(--theme-color, #1e3a8a); }
+.teacher-code-block { color: var(--theme-color, #2563eb); background-color: #f8fafc; }
+.teacher-qr-text { color: var(--theme-color, #111827); }

@@ -1,0 +1,102 @@
+/* public/css/teacher-dashboard.css */
+
+/* "Create Class" pogas stils */
+.btn-create-class {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #09090b;
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: 1rem;
+    transition: background-color 0.2s, transform 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+}
+
+.btn-create-class:hover {
+    background-color: #000000;
+}
+
+/* Klašu saraksta režģis */
+.teacher-classes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .teacher-classes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Klikšķināmais klases lauks (a tags) */
+.class-card-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    background-color: #f9fafb;
+    border: 1px solid #f3f4f6;
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.class-card-link:hover {
+    background-color: #f3f4f6;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Iekšējā struktūra laukam */
+.class-card-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Krāsainais aplītis */
+.class-color-dot {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    border: 1px solid #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+/* Teksta stili - TAGAD AR DINAMISKO KRĀSU */
+.class-card-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--class-color); /* Izmanto lietotāja izvēlēto krāsu */
+    margin: 0;
+    transition: filter 0.2s;
+}
+
+.class-card-link:hover .class-card-title {
+    filter: brightness(0.85); /* Uz hover krāsa paliek nedaudz tumšāka un izteiksmīgāka */
+}
+
+.class-card-teacher {
+    font-size: 0.75rem;
+    color: var(--class-color); /* Skolotāja vārds saņem to pašu toni */
+    opacity: 0.8; /* Padarām vārdu nedaudz caurspīdīgāku, lai smukāk kontrastē ar virsrakstu */
+    margin: 0.25rem 0 0 0;
+}
+
+/* Bultiņas ikona labajā pusē */
+.class-card-arrow {
+    color: var(--class-color); /* Bultiņa arī saskan ar tēmu */
+    opacity: 0.6;
+    transition: transform 0.2s, opacity 0.2s;
+    font-weight: bold;
+}
+
+.class-card-link:hover .class-card-arrow {
+    transform: translateX(4px);
+    opacity: 1;
+}
