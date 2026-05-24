@@ -27,12 +27,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        if ($user->usertype === 'admin') {
+            if ($user->usertype === 'admin') {
             return redirect()->route('admin.index');
         } elseif ($user->usertype === 'teacher') {
             return redirect()->route('teacher.index');
         } elseif ($user->usertype === 'user') {
-            return redirect()->route('user.index');
+            return redirect()->route('student.index');
         }
         abort(404);
     })->name('dashboard');
@@ -54,21 +54,23 @@ Route::middleware(['auth', 'can:access-teacher'])->group(function () {
 
     Route::get('/teacher/index', [TeacherController::class, 'index'])->name('teacher.index');
 
-    // Create Class
     Route::get('/teacher/create-class', [TeacherController::class, 'createClass'])
          ->name('teacher.create-class');
 
     Route::post('/teacher/classes', [TeacherController::class, 'storeClass'])
          ->name('teacher.classes.store');
 
-    // Single Class View
     Route::get('/teacher/class/{id}', [TeacherController::class, 'showClass'])
          ->name('teacher.class');
 
-    // Create Task
     Route::get('/teacher/class/{id}/create-task', [TeacherController::class, 'createTask'])
          ->name('teacher.create-task');
 
+    Route::post('/teacher/class/{id}/create-task', [TeacherController::class, 'storeTask'])
+         ->name('teacher.tasks.store');
+
+    Route::get('/teacher/task/{id}/edit', [TeacherController::class, 'editTask'])
+         ->name('teacher.edit-task');
 });
 
 
@@ -81,7 +83,7 @@ Route::middleware(['auth', 'can:access-admin'])->group(function () {
 
 // ==================== USER ====================
 Route::middleware(['auth', 'can:access-user'])->group(function () {
-    Route::get('/user', fn() => view('user.index'))->name('user.index');
+    Route::get('/student', fn() => view('student.index'))->name('student.index');
 });
 
 require __DIR__.'/auth.php';

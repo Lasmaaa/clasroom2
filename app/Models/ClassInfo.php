@@ -17,4 +17,9 @@ class ClassInfo extends Model
         'color',
         'class_code',
     ];
+
+    public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
 }

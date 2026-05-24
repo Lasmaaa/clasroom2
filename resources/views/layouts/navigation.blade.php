@@ -34,17 +34,8 @@
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('classes.index')" :active="request()->routeIs('classes.index')">
-                    {{ __('Classes') }}
-                </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('assignments.index')" :active="request()->routeIs('assignments.index')">
-                    {{ __('Assignments') }}
-                </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('videoclass.index')" :active="request()->routeIs('videoclass.index')">
-                    {{ __('Video Class') }}
-                </x-responsive-nav-link>
 
             </nav>
 

@@ -46,4 +46,25 @@
             </div>
         </div>
     </div>
+
+
+    @foreach($tasks as $task)
+    @if($task->isNotStartedYet())
+        <!-- Slēpt vai rādīt "drīz sāksies" -->
+        <div class="opacity-50">
+            <p>Uzdevums vēl nav sācies</p>
+        </div>
+    @elseif($task->isOverdue())
+        <div class="opacity-75">
+            <p class="text-red-600">Termiņš ir beidzies – iesniegšana vairs nav iespējama</p>
+        </div>
+    @else
+        <!-- Normāla iesniegšanas forma -->
+        <form method="POST" action="{{ route('student.task.submit', $task->id) }}">
+            @csrf
+            <!-- ... jūsu forma ... -->
+            <button type="submit">Iesniegt darbu</button>
+        </form>
+    @endif
+@endforeach
 </x-app-layout>

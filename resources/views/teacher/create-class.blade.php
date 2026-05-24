@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-lg mx-auto mt-12">
+    <div class="max-w-lg mx-auto mt-12 px-6">
         <h1 class="text-3xl font-bold text-center mb-8">Izveidot Jaunu Klasi</h1>
 
         <form action="{{ route('teacher.classes.store') }}" method="POST" class="space-y-6">
@@ -7,7 +7,7 @@
 
             <div>
                 <label class="block text-sm font-medium mb-2">Klases nosaukums</label>
-                <input type="text" name="class_name" required
+                <input type="text" name="title" required
                        class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500">
             </div>
 
