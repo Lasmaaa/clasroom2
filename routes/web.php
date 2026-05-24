@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CodeVerificationController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ClassNameController;
 use App\Http\Controllers\ClassController;
 use Illuminate\Support\Facades\Route;
@@ -69,8 +70,14 @@ Route::middleware(['auth', 'can:access-teacher'])->group(function () {
     Route::post('/teacher/class/{id}/create-task', [TeacherController::class, 'storeTask'])
          ->name('teacher.tasks.store');
 
-    Route::get('/teacher/task/{id}/edit', [TeacherController::class, 'editTask'])
-         ->name('teacher.edit-task');
+    Route::get('/tasks/{task}/edit', [App\Http\Controllers\Teacher\TaskController::class, 'edit'])
+         ->name('task.edit');
+    
+    Route::put('/tasks/{task}', [App\Http\Controllers\Teacher\TaskController::class, 'update'])
+         ->name('task.update');
+    
+    Route::delete('/tasks/{task}', [App\Http\Controllers\Teacher\TaskController::class, 'destroy'])
+         ->name('task.delete');
 });
 
 

@@ -19,7 +19,6 @@ class Task extends Model
         'status',
     ];
 
-    // ←←← ŠIS IR SVARĪGI!
     protected $casts = [
         'start_date' => 'datetime',
         'due_date'   => 'datetime',
@@ -57,4 +56,15 @@ class Task extends Model
             ? $this->due_date->format('d. F Y') 
             : 'Nav norādīts';
     }
+
+    // App/Models/Task.php
+public function teacher()
+{
+    return $this->belongsTo(User::class, 'teacher_id');
+}
+
+public function classroom()
+{
+    return $this->belongsTo(Classroom::class, 'classroom_id'); // vai class_id
+}
 }
