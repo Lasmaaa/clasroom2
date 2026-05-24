@@ -9,6 +9,8 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $table = 'tasks';
+
     protected $fillable = [
         'class_info_id',
         'name',
@@ -20,51 +22,29 @@ class Task extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'datetime',
         'due_date'   => 'datetime',
-        'completed_at' => 'datetime', // ja ir tāds lauks
+        'start_date' => 'datetime',
     ];
 
+    // ←←← ŠITAS Bija GALVENĀ KĻŪDA
     public function classInfo()
     {
-        return $this->belongsTo(ClassInfo::class);
+        return $this->belongsTo(ClassInfo::class, 'class_info_id');
     }
 
+
+    // Palīdzes funkcijas
     public function isOverdue()
     {
         return $this->due_date && 
                $this->due_date->isPast() && 
-               $this->status === 'pending';
-    }
-
-    public function isNotStartedYet()
-    {
-        return $this->start_date && $this->start_date->isFuture();
-    }
-
-    // Formāti
-    public function getFormattedStartDateAttribute()
-    {
-        return $this->start_date 
-            ? $this->start_date->format('d. F Y') 
-            : 'Nav norādīts';
+               $this->status !== 'completed';
     }
 
     public function getFormattedDueDateAttribute()
     {
         return $this->due_date 
-            ? $this->due_date->format('d. F Y') 
+            ? $this->due_date->format('d.m.Y H:i') 
             : 'Nav norādīts';
     }
-
-    // App/Models/Task.php
-public function teacher()
-{
-    return $this->belongsTo(User::class, 'teacher_id');
-}
-
-public function classroom()
-{
-    return $this->belongsTo(Classroom::class, 'classroom_id'); // vai class_id
-}
 }

@@ -70,14 +70,14 @@ Route::middleware(['auth', 'can:access-teacher'])->group(function () {
     Route::post('/teacher/class/{id}/create-task', [TeacherController::class, 'storeTask'])
          ->name('teacher.tasks.store');
 
-    Route::get('/tasks/{task}/edit', [App\Http\Controllers\Teacher\TaskController::class, 'edit'])
-         ->name('task.edit');
-    
-    Route::put('/tasks/{task}', [App\Http\Controllers\Teacher\TaskController::class, 'update'])
-         ->name('task.update');
-    
-    Route::delete('/tasks/{task}', [App\Http\Controllers\Teacher\TaskController::class, 'destroy'])
-         ->name('task.delete');
+    Route::get('/teacher/tasks/{task}/edit', [App\Http\Controllers\TaskController::class, 'edit'])
+     ->name('teacher.task.edit');
+
+Route::put('/teacher/tasks/{task}', [App\Http\Controllers\TaskController::class, 'update'])
+     ->name('teacher.task.update');
+
+Route::delete('/teacher/tasks/{task}', [App\Http\Controllers\TaskController::class, 'destroy'])
+     ->name('teacher.task.delete');
 });
 
 

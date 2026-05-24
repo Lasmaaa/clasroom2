@@ -83,7 +83,7 @@
             <span class="text-gray-500">
                 Izveidots {{ $task->created_at->diffForHumans() }}
             </span>
-            <a href="{{ route('teacher.task.edit', $task) }}" class="btn btn-sm btn-warning">
+            <a href="{{ route('teacher.task.edit', $task) }}" class="btn btn-warning btn-sm">
                 Skatīt / Rediģēt
             </a>
         </div>
