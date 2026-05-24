@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <a href="{{ route('teacher.class.show', $task->class_id ?? $task->classroom_id) }}" class="btn btn-secondary mt-3">
+    <a href="{{ route('teacher.class.show', $task->class_id ?? $task->class_info) }}" class="btn btn-secondary mt-3">
         ← Atpakaļ uz klasi
     </a>
 </div>

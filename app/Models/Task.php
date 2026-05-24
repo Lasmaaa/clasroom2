@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ClassInfo;
 
 class Task extends Model
 {
@@ -26,11 +27,10 @@ class Task extends Model
         'start_date' => 'datetime',
     ];
 
-    // ←←← ŠITAS Bija GALVENĀ KĻŪDA
     public function classInfo()
-    {
-        return $this->belongsTo(ClassInfo::class, 'class_info_id');
-    }
+{
+    return $this->belongsTo(ClassInfo::class, 'class_info_id');
+}
 
 
     // Palīdzes funkcijas

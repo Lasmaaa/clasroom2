@@ -38,6 +38,7 @@ class TeacherController extends Controller
 
         return redirect()->route('teacher.index')
                          ->with('success', 'Klase veiksmīgi izveidota!');
+                         
     }
 
     public function showClass($id)
@@ -75,20 +76,11 @@ class TeacherController extends Controller
         'name'        => $request->task_name,
         'description' => $request->task_description,
         'color'       => $request->color ?? '#3b82f6',
-        'start_date'  => $request->start_date,     // ← labots
-        'due_date'    => $request->due_date,       // ← labots
+        'start_date'  => $request->start_date,   
+        'due_date'    => $request->due_date,    
     ]);
 
     return redirect()->route('teacher.class', $id)
                      ->with('success', 'Uzdevums veiksmīgi izveidots!');
 }
-
-    public function editTask($id)
-    {
-        $task = Task::whereHas('classInfo', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->findOrFail($id);
-
-        return view('teacher.edit-task', compact('task'));
-    }
 }
