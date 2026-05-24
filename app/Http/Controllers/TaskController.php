@@ -26,15 +26,18 @@ class TaskController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
-            'due_date'    => 'required|date',
             'start_date'  => 'nullable|date',
+            'due_date'    => 'nullable|date|after_or_equal:start_date',
             'color'       => 'nullable|string|max:7',
             'status'      => 'nullable|in:pending,completed',
         ]);
 
-        $task->update($request->only([
+        $data = $request->only([
             'name', 'description', 'due_date', 'start_date', 'color', 'status'
-        ]));
+        ]);
+        $data['title'] = $data['name'];
+
+        $task->update($data);
 
         return redirect()->route('teacher.class.show', $task->class_info_id)
                          ->with('success', 'Uzdevums veiksmīgi atjaunināts!');

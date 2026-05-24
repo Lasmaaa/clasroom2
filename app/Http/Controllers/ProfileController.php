@@ -53,6 +53,10 @@ class ProfileController extends Controller
     $user->avatar = $path;
     $user->save();
 
+    if (! $request->expectsJson() && ! $request->ajax()) {
+        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+    }
+
     return response()->json([
         'success' => true,
         'avatar_url' => asset('storage/' . $path),

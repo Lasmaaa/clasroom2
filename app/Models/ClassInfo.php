@@ -19,7 +19,17 @@ class ClassInfo extends Model
     ];
 
     public function tasks()
-{
-    return $this->hasMany(Task::class);
-}
+    {
+        return $this->hasMany(Task::class, 'class_info_id')->latest();
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'class_info_user')->withTimestamps();
+    }
 }

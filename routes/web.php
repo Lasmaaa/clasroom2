@@ -6,6 +6,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ClassNameController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\StudentClassController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -61,6 +62,15 @@ Route::middleware(['auth', 'can:access-teacher'])->group(function () {
     Route::post('/teacher/classes', [TeacherController::class, 'storeClass'])
          ->name('teacher.classes.store');
 
+    Route::post('/teacher/code/generate', [CodeVerificationController::class, 'generate'])
+         ->name('teacher.code.generate');
+
+    Route::post('/teacher/code', [CodeVerificationController::class, 'store'])
+         ->name('teacher.code.store');
+
+    Route::get('/teacher/code/{code}', [CodeVerificationController::class, 'show'])
+         ->name('teacher.show');
+
     Route::get('/teacher/class/{id}', [TeacherController::class, 'showClass'])
          ->name('teacher.class');
 
@@ -92,7 +102,11 @@ Route::middleware(['auth', 'can:access-admin'])->group(function () {
 
 // ==================== USER ====================
 Route::middleware(['auth', 'can:access-user'])->group(function () {
-    Route::get('/student', fn() => view('student.index'))->name('student.index');
+    Route::get('/student', [StudentClassController::class, 'index'])->name('student.index');
+    Route::post('/student/classes/join', [StudentClassController::class, 'join'])->name('student.classes.join');
+    Route::get('/student/classes/{classInfo}', [StudentClassController::class, 'showClass'])->name('student.classes.show');
+    Route::get('/student/tasks/{task}', [StudentClassController::class, 'showTask'])->name('student.tasks.show');
+    Route::post('/student/tasks/{task}/submit', [StudentClassController::class, 'submitTask'])->name('student.tasks.submit');
 });
 
 require __DIR__.'/auth.php';

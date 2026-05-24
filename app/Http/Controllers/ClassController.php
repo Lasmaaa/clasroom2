@@ -8,6 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class ClassController extends Controller
 {
+    public function show(ClassInfo $class_info)
+    {
+        if ($class_info->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $class_info->load('tasks');
+
+        return view('teacher.class', ['class' => $class_info]);
+    }
+
     public function store(Request $request)
 {
     $validated = $request->validate([

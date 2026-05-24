@@ -1,6 +1,6 @@
 <!-- resources/views/profile/partials/update-profile-picture-form.blade.php -->
 
-<form id="avatar-upload-form" enctype="multipart/form-data">
+<form id="avatar-upload-form" method="POST" action="{{ route('profile.avatar.update') }}" enctype="multipart/form-data">
     @csrf
 
     <div class="flex items-center gap-6">
@@ -19,6 +19,12 @@
             <input type="file" id="avatar" name="avatar" accept="image/*" 
                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
             <p id="upload-status" class="mt-2 text-sm text-gray-500"></p>
+            @error('avatar')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+            @if (session('status') === 'avatar-updated')
+                <p class="mt-2 text-sm text-green-600 font-medium">Profila bilde veiksmīgi nomainīta!</p>
+            @endif
         </div>
     </div>
 
@@ -48,6 +54,8 @@ document.getElementById('avatar-upload-form').addEventListener('submit', async f
             method: 'POST',
             body: formData,
             headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
         });
@@ -70,13 +78,8 @@ document.getElementById('avatar-upload-form').addEventListener('submit', async f
 
             if (currentAvatar) currentAvatar.src = newAvatarSrc;
 
-            statusEl.innerHTML = '✅ Profila bilde veiksmīgi nomainīta!<br>Pārlādējam lapu...';
+            statusEl.innerHTML = 'Profila bilde veiksmīgi nomainīta!';
             statusEl.className = 'mt-2 text-sm text-green-600 font-medium';
-
-            // Pārej uz dashboard, lai redzētu jauno bildi arī user-side-panel
-            setTimeout(() => {
-                window.location.href = '{{ route("user.index") }}';
-            }, 1200);
 
         } else {
             throw new Error(data.message || 'Neizdevās nomainīt bildi');

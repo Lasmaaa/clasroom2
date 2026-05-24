@@ -1,66 +1,99 @@
-@extends('layouts.app')
+<x-app-layout>
+    <div class="max-w-4xl mx-auto px-6 py-10">
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h1 class="text-2xl font-bold mb-8">Rediget uzdevumu</h1>
 
-@section('content')
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h4>Rediģēt uzdevumu</h4>
-        </div>
-        <div class="card-body">
-
-            <form method="POST" action="{{ route('teacher.task.update', $task) }}">
+            <form method="POST" action="{{ route('teacher.task.update', $task) }}" class="space-y-6">
                 @csrf
                 @method('PUT')
 
-                <div class="mb-3">
-                    <label class="form-label">Uzdevuma nosaukums</label>
-                    <input type="text" name="title" class="form-control" value="{{ old('title', $task->title) }}" required>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Uzdevuma nosaukums</label>
+                    <input type="text" name="name" value="{{ old('name', $task->name) }}" required
+                           class="w-full p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Apraksts</label>
-                    <textarea name="description" class="form-control" rows="6" required>{{ old('description', $task->description) }}</textarea>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Apraksts</label>
+                    <textarea name="description" rows="6"
+                              class="w-full p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">{{ old('description', $task->description) }}</textarea>
+                    @error('description')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Termiņš</label>
-                            <input type="datetime-local" name="deadline" class="form-control" 
-                                   value="{{ old('deadline', $task->deadline ? $task->deadline->format('Y-m-d\TH:i') : '') }}" required>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sakuma datums</label>
+                        <input type="datetime-local" name="start_date"
+                               value="{{ old('start_date', optional($task->start_date)->format('Y-m-d\TH:i')) }}"
+                               class="w-full p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('start_date')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Maksimālais punktu skaits</label>
-                            <input type="number" name="points" class="form-control" 
-                                   value="{{ old('points', $task->points) }}">
-                        </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Termins</label>
+                        <input type="datetime-local" name="due_date"
+                               value="{{ old('due_date', optional($task->due_date)->format('Y-m-d\TH:i')) }}"
+                               class="w-full p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('due_date')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="submit" class="btn btn-primary">Saglabāt izmaiņas</button>
-                    
-                    <button type="button" class="btn btn-danger" 
-                            onclick="if(confirm('Vai tiešām izdzēst šo uzdevumu?')) 
-                            document.getElementById('delete-form').submit()">
-                        🗑 Izdzēst uzdevumu
-                    </button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Krasa</label>
+                        <input type="color" name="color" value="{{ old('color', $task->color ?? '#3b82f6') }}"
+                               class="w-full h-12 p-1 border border-gray-300 rounded-2xl cursor-pointer">
+                        @error('color')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Statuss</label>
+                        <select name="status"
+                                class="w-full p-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="pending" @selected(old('status', $task->status) === 'pending')>Nav pabeigts</option>
+                            <option value="completed" @selected(old('status', $task->status) === 'completed')>Pabeigts</option>
+                        </select>
+                        @error('status')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-between pt-4">
+                    <a href="{{ route('teacher.class.show', $task->class_info_id) }}"
+                       class="px-6 py-3 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-2xl">
+                        Atpakal uz klasi
+                    </a>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button type="submit"
+                                class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-2xl">
+                            Saglabat izmainas
+                        </button>
+                        <button type="button"
+                                onclick="if (confirm('Vai tiesam izdzest so uzdevumu?')) document.getElementById('delete-form').submit()"
+                                class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-2xl">
+                            Izdzest
+                        </button>
+                    </div>
                 </div>
             </form>
 
-            <!-- Delete forma -->
-            <form id="delete-form" action="{{ route('teacher.task.delete', $task) }}" method="POST" style="display:none">
+            <form id="delete-form" action="{{ route('teacher.task.delete', $task) }}" method="POST" class="hidden">
                 @csrf
                 @method('DELETE')
             </form>
-
         </div>
     </div>
-
-    <a href="{{ route('teacher.class.show', $task->class_id ?? $task->class_info) }}" class="btn btn-secondary mt-3">
-        ← Atpakaļ uz klasi
-    </a>
-</div>
-@endsection
+</x-app-layout>

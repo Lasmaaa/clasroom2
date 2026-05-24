@@ -41,4 +41,14 @@ class User extends Authenticatable
     {
         return $this->classInfo()->latest()->first();
     }
+
+    public function joinedClasses()
+    {
+        return $this->belongsToMany(ClassInfo::class, 'class_info_user')->withTimestamps();
+    }
+
+    public function taskSubmissions()
+    {
+        return $this->hasMany(TaskSubmission::class);
+    }
 }

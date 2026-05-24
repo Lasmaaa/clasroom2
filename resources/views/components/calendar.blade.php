@@ -1,6 +1,6 @@
-<div class="calendar-container" id="calendar-main" 
-     data-completed="{{ json_encode($completedDates ?? []) }}" 
-     data-due="{{ json_encode($dueDates ?? []) }}">
+<div class="calendar-container" id="calendar-main"
+     data-completed='@json($completedDates ?? [])'
+     data-due='@json($dueDates ?? [])'>
 
     <div class="flex items-center justify-between mb-5">
         <button onclick="prevMonth()" class="text-3xl hover:bg-gray-100 w-11 h-11 rounded-xl transition">←</button>
@@ -136,15 +136,66 @@ document.addEventListener('DOMContentLoaded', function () {
             weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
         });
 
-        let statusText = "Informācija par šo datumu vēl nav pieejama.";
-        if (loginHistory.hasOwnProperty(dateStr)) {
-            statusText = "Šajā dienā tu biji ielogojies sistēmā! 🎉";
+        const dueTasks = dueDates[dateStr] || [];
+        const completedTasks = completedDates[dateStr] || [];
+
+        let content = '';
+
+        if (dueTasks.length > 0) {
+            content += '<div class="space-y-3">';
+            dueTasks.forEach(task => {
+                const title = escapeHtml(task.title || 'Uzdevums');
+                const className = escapeHtml(task.class_name || 'Klase nav norādīta');
+                const description = escapeHtml(task.description || '');
+                const url = task.url ? escapeAttribute(task.url) : '#';
+
+                content += `
+                    <a href="${url}" class="block border border-red-200 bg-red-50 rounded-2xl p-4 hover:bg-red-100 transition">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <h4 class="font-semibold text-red-900">${title}</h4>
+                                <p class="text-sm text-red-700">${className}</p>
+                            </div>
+                            <span class="text-red-600 text-lg leading-none">●</span>
+                        </div>
+                        ${description ? `<p class="mt-3 text-sm text-red-800">${description}</p>` : ''}
+                    </a>
+                `;
+            });
+            content += '</div>';
+        } else if (completedTasks.length > 0) {
+            content = '<div class="space-y-3">';
+            completedTasks.forEach(task => {
+                content += `
+                    <div class="border border-green-200 bg-green-50 rounded-2xl p-4">
+                        <h4 class="font-semibold text-green-900">${escapeHtml(task.title || 'Pabeigts uzdevums')}</h4>
+                        ${task.description ? `<p class="mt-2 text-sm text-green-800">${escapeHtml(task.description)}</p>` : ''}
+                    </div>
+                `;
+            });
+            content += '</div>';
+        } else if (loginHistory.hasOwnProperty(dateStr)) {
+            content = '<p class="text-gray-500 text-center py-10">Šajā dienā tu biji ielogojies sistēmā.</p>';
+        } else {
+            content = '<p class="text-gray-500 text-center py-10">Šajā datumā nav uzdevumu.</p>';
         }
 
-        let content = `<p class="text-gray-500 text-center py-10">${statusText}</p>`;
         tasksContainer.innerHTML = content;
         modal.classList.remove('hidden');
     };
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttribute(value) {
+        return escapeHtml(value).replace(/`/g, '&#096;');
+    }
 
     window.closeModal = function() {
         document.getElementById('task-modal').classList.add('hidden');

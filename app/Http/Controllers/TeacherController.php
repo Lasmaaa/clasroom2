@@ -73,6 +73,8 @@ class TeacherController extends Controller
     ]);
 
     $class->tasks()->create([
+        'user_id'     => Auth::id(),
+        'title'       => $request->task_name,
         'name'        => $request->task_name,
         'description' => $request->task_description,
         'color'       => $request->color ?? '#3b82f6',

@@ -7,8 +7,11 @@
 
             <div>
                 <label class="block text-sm font-medium mb-2">Klases nosaukums</label>
-                <input type="text" name="title" required
+                <input type="text" name="class_name" value="{{ old('class_name') }}" required
                        class="w-full p-4 border border-gray-300 rounded-2xl focus:outline-none focus:border-blue-500">
+                @error('class_name')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
