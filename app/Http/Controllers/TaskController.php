@@ -1,16 +1,15 @@
 <?php
-
-namespace App\Http\Controllers\Teacher;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function edit(Task $task)
+    public function editTask(Task $task)
     {
-        // Drošāka pārbaude
         if (!$task->classInfo || $task->classInfo->user_id !== auth()->id()) {
             abort(403, 'Nav piekļuves tiesību šim uzdevumam.');
         }
@@ -18,7 +17,7 @@ class TaskController extends Controller
         return view('teacher.edit-task', compact('task'));
     }
 
-    public function update(Request $request, Task $task)
+    public function updateTask(Request $request, Task $task)
     {
         if (!$task->classInfo || $task->classInfo->user_id !== auth()->id()) {
             abort(403);
@@ -41,7 +40,7 @@ class TaskController extends Controller
                          ->with('success', 'Uzdevums veiksmīgi atjaunināts!');
     }
 
-    public function destroy(Task $task)
+    public function destroyTask(Task $task)
     {
         if (!$task->classInfo || $task->classInfo->user_id !== auth()->id()) {
             abort(403);
